@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'add_contact.dart';
-import 'view_contact.dart';
+import 'add_post.dart';
+import 'view_post.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 
@@ -14,13 +14,13 @@ class _HomePageState extends State<HomePage> {
 
   navigateToAddScreen() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddContact();
+      return AddPost();
     }));
   }
 
   navigateToViewScreen(id) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return ViewContact(id);
+      return ViewPost(id);
     }));
   }
 
@@ -75,10 +75,16 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              "${snapshot.value['firstName']} ${snapshot.value['lastName']}",
+                              "${snapshot.value['postTitle']}",
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "${snapshot.value['firstName']} ${snapshot.value['lastName']}",
+                              style: TextStyle(
+                                fontSize: 15.0,
                               ),
                             ),
                             SizedBox(height: 5.0),

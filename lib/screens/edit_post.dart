@@ -1,4 +1,4 @@
-import 'package:eShop/model/contact.dart';
+import 'package:eShopV2/model/post.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
@@ -6,16 +6,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-class EditContact extends StatefulWidget {
+class EditPost extends StatefulWidget {
   final String id;
-  EditContact(this.id);
+  EditPost(this.id);
   @override
-  _EditContactState createState() => _EditContactState(id);
+  _EditPostState createState() => _EditPostState(id);
 }
 
-class _EditContactState extends State<EditContact> {
+class _EditPostState extends State<EditPost> {
   String id;
-  _EditContactState(this.id);
+  _EditPostState(this.id);
 
   String _firstName = '';
   String _lastName = '';
@@ -23,6 +23,8 @@ class _EditContactState extends State<EditContact> {
   String _address = '';
   String _email = '';
   String _photoUrl;
+  String _postTitle;
+  String _postDetails;
 
   // handle text editing controller
 
@@ -31,6 +33,8 @@ class _EditContactState extends State<EditContact> {
   TextEditingController _poController = TextEditingController();
   TextEditingController _emController = TextEditingController();
   TextEditingController _adController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _detailsController = TextEditingController();
 
   bool isLoading = true;
 
@@ -40,43 +44,57 @@ class _EditContactState extends State<EditContact> {
   @override
   void initState() {
     super.initState();
-    // get contact from firebase
-    this.getContact(id);
+    // get Post from firebase
+    this.getPost(id);
   }
 
-  getContact(id) async {
-    Contact contact;
+  getPost(id) async {
+    Post post;
     _databaseReference.child(id).onValue.listen((event) {
-      contact = Contact.fromSnapshot(event.snapshot);
+      post = Post.fromSnapshot(event.snapshot);
 
-      _fnController.text = contact.firstName;
-      _lnController.text = contact.lastName;
-      _poController.text = contact.phone;
-      _emController.text = contact.email;
-      _adController.text = contact.address;
+      _fnController.text = post.firstName;
+      _lnController.text = post.lastName;
+      _poController.text = post.phone;
+      _emController.text = post.email;
+      _adController.text = post.address;
+      _titleController.text = post.postTitle;
+      _detailsController.text = post.postDetails;
 
       setState(() {
-        _firstName = contact.firstName;
-        _lastName = contact.lastName;
-        _phone = contact.phone;
-        _email = contact.email;
-        _address = contact.address;
-        _photoUrl = contact.photoUrl;
+        _firstName = post.firstName;
+        _lastName = post.lastName;
+        _phone = post.phone;
+        _email = post.email;
+        _address = post.address;
+        _photoUrl = post.photoUrl;
+        _postTitle = post.postTitle;
+        _postDetails = post.postDetails;
         isLoading = false;
       });
     });
   }
 
-  // update contact
-  updateContact(BuildContext context) async {
+  // update Post
+  updatePost(BuildContext context) async {
     if (_firstName.isNotEmpty &&
         _lastName.isNotEmpty &&
         _phone.isNotEmpty &&
+        _postTitle.isNotEmpty &&
+        _postDetails.isNotEmpty &&
         _email.isNotEmpty &&
         _address.isNotEmpty) {
-      Contact contact = Contact.withId(this.id, this._firstName, this._lastName,
-          this._phone, this._email, this._address, this._photoUrl);
-      await _databaseReference.child(id).set(contact.toJson());
+      Post post = Post.withId(
+          this.id,
+          this._firstName,
+          this._lastName,
+          this._postTitle,
+          this._postDetails,
+          this._phone,
+          this._email,
+          this._address,
+          this._photoUrl);
+      await _databaseReference.child(id).set(post.toJson());
       navigateToLastScreen(context);
     } else {
       showDialog(
@@ -140,7 +158,7 @@ class _EditContactState extends State<EditContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Contact"),
+        title: Text("Edit Post"),
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.lime.shade200,
@@ -261,13 +279,45 @@ class _EditContactState extends State<EditContact> {
                         ),
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _postTitle = value;
+                          });
+                        },
+                        controller: _adController,
+                        decoration: InputDecoration(
+                          labelText: 'Post Title',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _postDetails = value;
+                          });
+                        },
+                        controller: _adController,
+                        decoration: InputDecoration(
+                          labelText: 'Post Details',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                        ),
+                      ),
+                    ),
                     // update button
                     Container(
                       padding: EdgeInsets.only(top: 20.0),
                       child: RaisedButton(
                         padding: EdgeInsets.fromLTRB(100.0, 20.0, 100.0, 20.0),
                         onPressed: () {
-                          updateContact(context);
+                          updatePost(context);
                         },
                         color: Colors.black,
                         child: Text(

@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 
-class Contact {
+class Post {
   String _id;
   String _firstName;
   String _lastName;
@@ -8,14 +8,24 @@ class Contact {
   String _email;
   String _address;
   String _photoUrl;
+  String _postTitle;
+  String _postDetails;
 
   // Constructor for add
-  Contact(this._firstName, this._lastName, this._phone, this._email,
-      this._address, this._photoUrl);
+  Post(this._firstName, this._lastName, this._phone, this._email, this._address,
+      this._photoUrl, this._postTitle, this._postDetails);
 
   // Constructor for edit
-  Contact.withId(this._id, this._firstName, this._lastName, this._phone,
-      this._email, this._address, this._photoUrl);
+  Post.withId(
+      this._id,
+      this._firstName,
+      this._lastName,
+      this._phone,
+      this._email,
+      this._address,
+      this._photoUrl,
+      this._postTitle,
+      this._postDetails);
 
   // Getters
   String get id => this._id;
@@ -25,6 +35,8 @@ class Contact {
   String get email => this._email;
   String get address => this._address;
   String get photoUrl => this._photoUrl;
+  String get postTitle => this._postTitle;
+  String get postDetails => this._postDetails;
 
   // Setters
   set firstName(String firstName) {
@@ -51,7 +63,15 @@ class Contact {
     this._photoUrl = photoUrl;
   }
 
-  Contact.fromSnapshot(DataSnapshot snapshot) {
+  set postTitle(String postTitle) {
+    this._postTitle = postTitle;
+  }
+
+  set postDetails(String postDetails) {
+    this._postDetails = postDetails;
+  }
+
+  Post.fromSnapshot(DataSnapshot snapshot) {
     this._id = snapshot.key;
     this._firstName = snapshot.value['firstName'];
     this._lastName = snapshot.value['lastName'];
@@ -59,6 +79,8 @@ class Contact {
     this._email = snapshot.value['email'];
     this._address = snapshot.value['address'];
     this._photoUrl = snapshot.value['photoUrl'];
+    this._postTitle = snapshot.value['postTitle'];
+    this._postDetails = snapshot.value['postDetails'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,7 +90,9 @@ class Contact {
       "phone": _phone,
       "email": _email,
       "address": _address,
-      "photoUrl": _photoUrl
+      "photoUrl": _photoUrl,
+      "postTitle": _postTitle,
+      "postDetails": _postDetails
     };
   }
 }

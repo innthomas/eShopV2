@@ -1,28 +1,28 @@
-import 'package:eShop/model/contact.dart';
-import 'package:eShop/screens/edit_contact.dart';
+import 'package:eShopV2/model/post.dart';
+import 'package:eShopV2/screens/edit_post.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ViewContact extends StatefulWidget {
+class ViewPost extends StatefulWidget {
   final String id;
-  ViewContact(this.id);
+  ViewPost(this.id);
   @override
-  _ViewContactState createState() => _ViewContactState(id);
+  _ViewPostState createState() => _ViewPostState(id);
 }
 
-class _ViewContactState extends State<ViewContact> {
+class _ViewPostState extends State<ViewPost> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.reference();
 
   String id;
-  _ViewContactState(this.id);
-  Contact _contact;
+  _ViewPostState(this.id);
+  Post _post;
   bool isLoading = true;
 
-  getContact(id) async {
+  getPost(id) async {
     _databaseReference.child(id).onValue.listen((event) {
       setState(() {
-        _contact = Contact.fromSnapshot(event.snapshot);
+        _post = Post.fromSnapshot(event.snapshot);
         isLoading = false;
       });
     });
@@ -31,7 +31,7 @@ class _ViewContactState extends State<ViewContact> {
   @override
   void initState() {
     super.initState();
-    this.getContact(id);
+    this.getPost(id);
   }
 
   callAction(String number) async {
@@ -52,14 +52,14 @@ class _ViewContactState extends State<ViewContact> {
     }
   }
 
-  deleteContact() {
+  deletePost() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Colors.lime.shade200,
             title: Text("Delete?"),
-            content: Text("Delete Contact?"),
+            content: Text("Delete Post?"),
             actions: <Widget>[
               FlatButton(
                 child: Text('Cancel'),
@@ -84,7 +84,7 @@ class _ViewContactState extends State<ViewContact> {
 
   navigateToEditScreen(id) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return EditContact(id);
+      return EditPost(id);
     }));
   }
 
@@ -98,7 +98,7 @@ class _ViewContactState extends State<ViewContact> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("View Contact"),
+        title: Text("View Post "),
       ),
       backgroundColor: Colors.lime.shade700,
       body: Container(
@@ -113,9 +113,9 @@ class _ViewContactState extends State<ViewContact> {
                       height: 200.0,
                       child: Image(
                         //
-                        image: _contact.photoUrl == "empty"
+                        image: _post.photoUrl == "empty"
                             ? AssetImage("assets/logo.png")
-                            : NetworkImage(_contact.photoUrl),
+                            : NetworkImage(_post.photoUrl),
                         fit: BoxFit.contain,
                       )),
                   //name
@@ -132,8 +132,28 @@ class _ViewContactState extends State<ViewContact> {
                               width: 10.0,
                             ),
                             Text(
-                              "${_contact.firstName} ${_contact.lastName}",
+                              "${_post.firstName} ${_post.lastName}",
                               style: TextStyle(fontSize: 20.0),
+                            ),
+                          ],
+                        )),
+                  ),
+                  //post details
+                  Card(
+                    color: Colors.lime.shade200,
+                    elevation: 2.0,
+                    child: Container(
+                        margin: EdgeInsets.all(20.0),
+                        width: double.maxFinite,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.details),
+                            Container(
+                              width: 10.0,
+                            ),
+                            Text(
+                              _post.postDetails,
+                              style: TextStyle(fontSize: 14.0),
                             ),
                           ],
                         )),
@@ -152,7 +172,7 @@ class _ViewContactState extends State<ViewContact> {
                               width: 10.0,
                             ),
                             Text(
-                              _contact.phone,
+                              _post.phone.toString(),
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ],
@@ -172,7 +192,7 @@ class _ViewContactState extends State<ViewContact> {
                               width: 10.0,
                             ),
                             Text(
-                              _contact.email,
+                              _post.email,
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ],
@@ -192,7 +212,7 @@ class _ViewContactState extends State<ViewContact> {
                               width: 10.0,
                             ),
                             Text(
-                              _contact.address,
+                              _post.address,
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ],
@@ -213,7 +233,7 @@ class _ViewContactState extends State<ViewContact> {
                               icon: Icon(Icons.phone),
                               color: Colors.black,
                               onPressed: () {
-                                callAction(_contact.phone);
+                                callAction(_post.phone);
                               },
                             ),
                             IconButton(
@@ -221,7 +241,7 @@ class _ViewContactState extends State<ViewContact> {
                               icon: Icon(Icons.message),
                               color: Colors.black,
                               onPressed: () {
-                                smsAction(_contact.phone);
+                                smsAction(_post.phone);
                               },
                             )
                           ],
@@ -250,7 +270,7 @@ class _ViewContactState extends State<ViewContact> {
                               icon: Icon(Icons.delete),
                               color: Colors.black,
                               onPressed: () {
-                                deleteContact();
+                                deletePost();
                               },
                             )
                           ],

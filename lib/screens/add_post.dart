@@ -1,4 +1,4 @@
-import 'package:eShop/model/contact.dart';
+import 'package:eShopV2/model/post.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
@@ -6,30 +6,42 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
-class AddContact extends StatefulWidget {
+class AddPost extends StatefulWidget {
   @override
-  _AddContactState createState() => _AddContactState();
+  _AddPostState createState() => _AddPostState();
 }
 
-class _AddContactState extends State<AddContact> {
+class _AddPostState extends State<AddPost> {
   DatabaseReference _databaseReference = FirebaseDatabase.instance.reference();
 
   String _firstName = '';
   String _lastName = '';
+  String _postTitle = '';
+  String _postDetails = '';
   String _phone = '';
   String _email = '';
   String _address = '';
   String _photoUrl = "empty";
 
-  saveContact(BuildContext context) async {
+  savePost(BuildContext context) async {
     if (_firstName.isNotEmpty &&
         _lastName.isNotEmpty &&
+        _postTitle.isNotEmpty &&
+        _postDetails.isNotEmpty &&
         _phone.isNotEmpty &&
         _email.isNotEmpty &&
         _address.isNotEmpty) {
-      Contact contact = Contact(this._firstName, this._lastName, this._phone,
-          this._email, this._address, this._photoUrl);
-      await _databaseReference.push().set(contact.toJson());
+      Post post = Post(
+        this._firstName,
+        this._lastName,
+        this._phone,
+        this._postTitle,
+        this._postDetails,
+        this._email,
+        this._address,
+        this._photoUrl,
+      );
+      await _databaseReference.push().set(post.toJson());
       navigateToLastScreen(context);
     } else {
       showDialog(
@@ -88,7 +100,7 @@ class _AddContactState extends State<AddContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Contact"),
+        title: Text("Add Post"),
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.lime.shade200,
@@ -198,7 +210,39 @@ class _AddContactState extends State<AddContact> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Address',
+                    labelText: 'Shop Address',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20.0),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _postTitle = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'PostTitle',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20.0),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _postDetails = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Post Details',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -212,7 +256,7 @@ class _AddContactState extends State<AddContact> {
                   color: Colors.black,
                   padding: EdgeInsets.fromLTRB(100.0, 20.0, 100.0, 20.0),
                   onPressed: () {
-                    saveContact(context);
+                    savePost(context);
                   },
                   child: Text(
                     'Save',
