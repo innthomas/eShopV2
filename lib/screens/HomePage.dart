@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: navigateToAddScreen,
           )
         ],
-        title: Center(child: Text("eShop")),
+        title: Center(child: Text("eShopV2")),
         backgroundColor: Colors.black,
       ),
       backgroundColor: Colors.lime.shade700,

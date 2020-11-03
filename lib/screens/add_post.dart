@@ -16,12 +16,12 @@ class _AddPostState extends State<AddPost> {
 
   String _firstName = '';
   String _lastName = '';
-  String _postTitle = '';
-  String _postDetails = '';
   String _phone = '';
   String _email = '';
   String _address = '';
   String _photoUrl = "empty";
+  String _postTitle = '';
+  String _postDetails = '';
 
   savePost(BuildContext context) async {
     if (_firstName.isNotEmpty &&
@@ -35,11 +35,11 @@ class _AddPostState extends State<AddPost> {
         this._firstName,
         this._lastName,
         this._phone,
-        this._postTitle,
-        this._postDetails,
         this._email,
         this._address,
         this._photoUrl,
+        this._postTitle,
+        this._postDetails,
       );
       await _databaseReference.push().set(post.toJson());
       navigateToLastScreen(context);

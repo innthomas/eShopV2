@@ -98,7 +98,7 @@ class _ViewPostState extends State<ViewPost> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text("View Post "),
+        title: Text(_post.postTitle),
       ),
       backgroundColor: Colors.lime.shade700,
       body: Container(
@@ -147,7 +147,7 @@ class _ViewPostState extends State<ViewPost> {
                         width: double.maxFinite,
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.details),
+                            Icon(Icons.list),
                             Container(
                               width: 10.0,
                             ),
