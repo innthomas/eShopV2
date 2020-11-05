@@ -287,7 +287,7 @@ class _EditPostState extends State<EditPost> {
                             _postTitle = value;
                           });
                         },
-                        controller: _adController,
+                        controller: _titleController,
                         decoration: InputDecoration(
                           labelText: 'Post Title',
                           border: OutlineInputBorder(
@@ -303,7 +303,7 @@ class _EditPostState extends State<EditPost> {
                             _postDetails = value;
                           });
                         },
-                        controller: _adController,
+                        controller: _detailsController,
                         decoration: InputDecoration(
                           labelText: 'Post Details',
                           border: OutlineInputBorder(

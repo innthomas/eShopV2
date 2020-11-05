@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'eShop',
       theme: ThemeData(
-        cursorColor: Colors.black,
         accentColor: Colors.black,
         primaryColor: Colors.black,
         focusColor: Colors.black,

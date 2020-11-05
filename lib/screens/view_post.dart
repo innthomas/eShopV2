@@ -1,4 +1,5 @@
 import 'package:eShopV2/model/post.dart';
+import 'package:eShopV2/screens/contact_details.dart';
 import 'package:eShopV2/screens/edit_post.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -127,13 +128,28 @@ class _ViewPostState extends State<ViewPost> {
                         width: double.maxFinite,
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.perm_identity),
+                            IconButton(
+                                iconSize: 30.0,
+                                icon: Icon(Icons.perm_identity_outlined),
+                                color: Colors.black,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return ContactDetails(this.id);
+                                      },
+                                    ),
+                                  );
+                                }),
                             Container(
                               width: 10.0,
                             ),
-                            Text(
-                              "${_post.firstName} ${_post.lastName}",
-                              style: TextStyle(fontSize: 20.0),
+                            SizedBox(
+                              child: Text(
+                                "${_post.firstName} ${_post.lastName}",
+                                style: TextStyle(fontSize: 20.0),
+                              ),
                             ),
                           ],
                         )),
@@ -145,137 +161,16 @@ class _ViewPostState extends State<ViewPost> {
                     child: Container(
                         margin: EdgeInsets.all(20.0),
                         width: double.maxFinite,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.list),
-                            Container(
-                              width: 10.0,
-                            ),
-                            Text(
+                        child: Flexible(
+                          child: Container(
+                            height: 300,
+                            child: Text(
                               _post.postDetails,
                               style: TextStyle(fontSize: 14.0),
                             ),
-                          ],
+                          ),
                         )),
                   ),
-                  // phone
-                  Card(
-                    color: Colors.lime.shade200,
-                    elevation: 2.0,
-                    child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        width: double.maxFinite,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.phone),
-                            Container(
-                              width: 10.0,
-                            ),
-                            Text(
-                              _post.phone.toString(),
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ],
-                        )),
-                  ),
-                  // email
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.lime.shade200,
-                    child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        width: double.maxFinite,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.email),
-                            Container(
-                              width: 10.0,
-                            ),
-                            Text(
-                              _post.email,
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ],
-                        )),
-                  ),
-                  // address
-                  Card(
-                    color: Colors.lime.shade200,
-                    elevation: 2.0,
-                    child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        width: double.maxFinite,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.home),
-                            Container(
-                              width: 10.0,
-                            ),
-                            Text(
-                              _post.address,
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ],
-                        )),
-                  ),
-                  // call and sms
-                  Card(
-                    elevation: 2.0,
-                    color: Colors.lime.shade200,
-                    child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        width: double.maxFinite,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            IconButton(
-                              iconSize: 30.0,
-                              icon: Icon(Icons.phone),
-                              color: Colors.black,
-                              onPressed: () {
-                                callAction(_post.phone);
-                              },
-                            ),
-                            IconButton(
-                              iconSize: 30.0,
-                              icon: Icon(Icons.message),
-                              color: Colors.black,
-                              onPressed: () {
-                                smsAction(_post.phone);
-                              },
-                            )
-                          ],
-                        )),
-                  ),
-                  // edit and delete
-                  Card(
-                    color: Colors.lime.shade200,
-                    elevation: 2.0,
-                    child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        width: double.maxFinite,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            IconButton(
-                              iconSize: 30.0,
-                              icon: Icon(Icons.edit),
-                              color: Colors.black,
-                              onPressed: () {
-                                navigateToEditScreen(id);
-                              },
-                            ),
-                            IconButton(
-                              iconSize: 30.0,
-                              icon: Icon(Icons.delete),
-                              color: Colors.black,
-                              onPressed: () {
-                                deletePost();
-                              },
-                            )
-                          ],
-                        )),
-                  )
                 ],
               ),
       ),
